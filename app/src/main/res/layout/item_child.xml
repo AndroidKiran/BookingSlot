@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="childItem"
+            type="com.droid.bookingslot.core.repo.Slot" />
+    </data>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/child_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:minHeight="@dimen/child_item_height"
+        android:padding="16dp"
+        android:text="@{childItem.getSlotPeriod()}"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        tools:text="01:00Am - 01:15Pm" />
+</layout>

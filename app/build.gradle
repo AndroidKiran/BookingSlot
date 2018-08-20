@@ -1,0 +1,137 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+
+android {
+    compileSdkVersion build_versions.targetSdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        applicationId "com.droid.bookingslot"
+        minSdkVersion build_versions.minSdk
+        targetSdkVersion build_versions.targetSdk
+        versionCode 1
+        versionName '1.0'
+        multiDexEnabled = true
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'API_URL', "\"${api_url}\""
+
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            lintOptions {
+                disable 'MissingTranslation'
+            }
+        }
+
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        dexInProcess = false
+        javaMaxHeapSize "8g"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    applicationVariants.all { variant ->
+
+        variant.getAnnotationProcessorConfiguration().resolutionStrategy {
+            force deps.support.annotations
+            force deps.jsr
+        }
+    }
+}
+
+kapt {
+    generateStubs = true
+}
+
+
+dependencies {
+    implementation deps.support.appCompat
+    implementation deps.support.recyclerview
+    implementation deps.support.cardview
+    implementation deps.support.design
+    implementation deps.support.v4
+    implementation deps.support.vector_drawable
+
+    implementation deps.lifecycle.extensions
+    implementation deps.lifecycle.java8
+    implementation deps.lifecycle.reactive
+
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.convertor
+    implementation deps.retrofit.adpater
+
+    implementation deps.okhttp.client
+    implementation deps.okhttp.interceptor
+
+    implementation deps.dagger.runtime
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
+
+    implementation deps.kotlin.stdlib
+    implementation deps.rx.kotlin
+    implementation deps.rx.android
+
+    implementation deps.room.runtime
+    implementation deps.room.rx
+
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+
+    implementation (deps.adv_recyclerview, {
+        transitive true
+    })
+
+    implementation deps.constraint_layout
+    implementation deps.gson
+    implementation deps.multi_dex
+
+    kapt deps.dagger.compiler
+    kapt deps.dagger.processor
+    kapt deps.lifecycle.compiler
+    kapt deps.room.compiler
+
+    testImplementation deps.junit
+    androidTestImplementation(deps.espresso_core, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    })
+
+}
+
